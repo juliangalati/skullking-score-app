@@ -9,6 +9,7 @@ export type Round = {
   number: number;
   bidsByPlayerId: Record<string, number>;
   tricksByPlayerId: Record<string, number>;
+  bonusByPlayerId: Record<string, number>;
   scoresByPlayerId: Record<string, number>;
 };
 

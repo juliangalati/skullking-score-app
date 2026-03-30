@@ -50,6 +50,23 @@ expect('zero bid failure (round 3)', calculatePlayerRoundScore(0, 2, 3), -30);
 // Round 1, exact bid of 1 → 1 * 20 = 20
 expect('exact bid round 1 (1/1)', calculatePlayerRoundScore(1, 1, 1), 20);
 
+// ─── Bonus points ─────────────────────────────────────────────────────────────
+
+// Exact bid with bonus: bid 2, won 2, round 5, bonus 40 → 2*20 + 40 = 80
+expect('exact bid + Mermaid captures Skull King bonus', calculatePlayerRoundScore(2, 2, 5, 40), 80);
+
+// Exact bid with standard 14 bonus: bid 1, won 1, round 3, bonus 10 → 20 + 10 = 30
+expect('exact bid + std 14 bonus', calculatePlayerRoundScore(1, 1, 3, 10), 30);
+
+// Zero bid success with bonus: bid 0, won 0, round 4, bonus 20 → 4*10 + 20 = 60
+expect('zero bid success + bonus', calculatePlayerRoundScore(0, 0, 4, 20), 60);
+
+// Missed bid — bonus NOT applied: bid 3, won 2, round 5, bonus 30 → -10
+expect('missed bid ignores bonus', calculatePlayerRoundScore(3, 2, 5, 30), -10);
+
+// Failed zero bid — bonus NOT applied: bid 0, won 1, round 5, bonus 20 → -50
+expect('failed zero bid ignores bonus', calculatePlayerRoundScore(0, 1, 5, 20), -50);
+
 // ─── calculateRoundScores ────────────────────────────────────────────────────
 
 console.log('\ncalculateRoundScores');
@@ -63,13 +80,14 @@ const round: Round = {
   number: 3,
   bidsByPlayerId: { p1: 2, p2: 0 },
   tricksByPlayerId: { p1: 2, p2: 0 },
+  bonusByPlayerId: { p1: 30, p2: 0 }, // Alice captured a Pirate with Skull King
   scoresByPlayerId: { p1: 0, p2: 0 }, // not used by calculateRoundScores
 };
 
 const scores = calculateRoundScores(round, players);
-// Alice: exact bid 2 → 2*20 = 40
-// Bob: zero bid success, round 3 → 3*10 = 30
-expect('Alice exact bid', scores['p1'], 40);
+// Alice: exact bid 2 + bonus 30 → 2*20 + 30 = 70
+// Bob: zero bid success, round 3 + bonus 0 → 3*10 = 30
+expect('Alice exact bid + bonus', scores['p1'], 70);
 expect('Bob zero bid success', scores['p2'], 30);
 
 // ─── calculateTotals ────────────────────────────────────────────────────────
@@ -81,12 +99,14 @@ const rounds: Round[] = [
     number: 1,
     bidsByPlayerId: {},
     tricksByPlayerId: {},
+    bonusByPlayerId: {},
     scoresByPlayerId: { p1: 20, p2: -10 },
   },
   {
     number: 2,
     bidsByPlayerId: {},
     tricksByPlayerId: {},
+    bonusByPlayerId: {},
     scoresByPlayerId: { p1: 40, p2: 20 },
   },
 ];

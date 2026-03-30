@@ -21,6 +21,7 @@ export function createRound(roundNumber: number, players: Player[]): Round {
     number: roundNumber,
     bidsByPlayerId: { ...empty },
     tricksByPlayerId: { ...empty },
+    bonusByPlayerId: { ...empty },
     scoresByPlayerId: { ...empty },
   };
 }
@@ -38,7 +39,7 @@ export function applyRoundScores(round: Round, players: Player[]): Round {
 
 // ─── Validation ────────────────────────────────────────────────────────────────
 
-export type ValidationError = { playerId: string; field: 'bid' | 'tricks'; message: string };
+export type ValidationError = { playerId: string; field: 'bid' | 'tricks' | 'bonus'; message: string };
 
 /**
  * Basic validation before accepting a round's input.
@@ -47,7 +48,8 @@ export type ValidationError = { playerId: string; field: 'bid' | 'tricks'; messa
  * Rules:
  *   - bid must be in [0, roundNumber]
  *   - tricksWon must be in [0, roundNumber]
- *   - every player must have an entry in both maps
+ *   - bonus must be >= 0
+ *   - every player must have an entry in all maps
  */
 export function validateRoundInput(round: Round, players: Player[]): ValidationError[] {
   const errors: ValidationError[] = [];
@@ -56,12 +58,16 @@ export function validateRoundInput(round: Round, players: Player[]): ValidationE
   for (const player of players) {
     const bid = round.bidsByPlayerId[player.id];
     const tricks = round.tricksByPlayerId[player.id];
+    const bonus = round.bonusByPlayerId[player.id];
 
     if (bid === undefined || bid < 0 || bid > max) {
       errors.push({ playerId: player.id, field: 'bid', message: `Bid must be 0–${max}` });
     }
     if (tricks === undefined || tricks < 0 || tricks > max) {
       errors.push({ playerId: player.id, field: 'tricks', message: `Tricks won must be 0–${max}` });
+    }
+    if (bonus === undefined || bonus < 0) {
+      errors.push({ playerId: player.id, field: 'bonus', message: 'Bonus must be ≥ 0' });
     }
   }
 

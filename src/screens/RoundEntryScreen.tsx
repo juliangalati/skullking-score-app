@@ -21,6 +21,9 @@ export function RoundEntryScreen({ route, navigation }: Props) {
   const [tricks, setTricks] = useState<Record<string, string>>(
     Object.fromEntries(players.map(p => [p.id, '']))
   );
+  const [bonuses, setBonuses] = useState<Record<string, string>>(
+    Object.fromEntries(players.map(p => [p.id, '']))
+  );
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function handleSubmit() {
@@ -30,6 +33,9 @@ export function RoundEntryScreen({ route, navigation }: Props) {
     );
     round.tricksByPlayerId = Object.fromEntries(
       players.map(p => [p.id, parseInt(tricks[p.id] ?? '0', 10) || 0])
+    );
+    round.bonusByPlayerId = Object.fromEntries(
+      players.map(p => [p.id, parseInt(bonuses[p.id] ?? '0', 10) || 0])
     );
 
     const validationErrors = validateRoundInput(round, players);
@@ -55,6 +61,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
         <Text style={[styles.headerCell, styles.nameCol]}>Player</Text>
         <Text style={[styles.headerCell, styles.numCol]}>Bid</Text>
         <Text style={[styles.headerCell, styles.numCol]}>Tricks</Text>
+        <Text style={[styles.headerCell, styles.numCol]}>Bonus</Text>
       </View>
 
       {players.map(player => (
@@ -88,8 +95,25 @@ export function RoundEntryScreen({ route, navigation }: Props) {
               <Text style={styles.errorText}>{errors[`${player.id}-tricks`]}</Text>
             )}
           </View>
+          <View style={styles.numCol}>
+            <TextInput
+              style={[styles.numInput, errors[`${player.id}-bonus`] && styles.inputError]}
+              keyboardType="number-pad"
+              placeholder="0"
+              value={bonuses[player.id]}
+              onChangeText={val => setBonuses(prev => ({ ...prev, [player.id]: val }))}
+              maxLength={3}
+            />
+            {errors[`${player.id}-bonus`] && (
+              <Text style={styles.errorText}>{errors[`${player.id}-bonus`]}</Text>
+            )}
+          </View>
         </View>
       ))}
+
+      <Text style={styles.bonusHint}>
+        Bonus (only if bid exact): +10 std 14 · +20 black 14 · +20 Pirate captures Mermaid · +30 Skull King captures Pirate · +40 Mermaid captures Skull King
+      </Text>
 
       <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
         <Text style={styles.submitBtnText}>Submit Round</Text>
@@ -132,7 +156,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   nameCol: {
-    flex: 2,
+    flex: 1.5,
   },
   numCol: {
     flex: 1,
@@ -154,8 +178,14 @@ const styles = StyleSheet.create({
     color: '#e74c3c',
     marginTop: 2,
   },
+  bonusHint: {
+    marginTop: 12,
+    fontSize: 12,
+    color: '#888',
+    lineHeight: 18,
+  },
   submitBtn: {
-    marginTop: 24,
+    marginTop: 16,
     backgroundColor: '#f5c518',
     paddingVertical: 14,
     borderRadius: 8,
