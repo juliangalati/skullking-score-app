@@ -68,7 +68,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
       <Text style={styles.heading}>Round {roundNumber} of {TOTAL_ROUNDS}</Text>
 
       <View style={styles.tableHeader}>
@@ -88,7 +88,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
               style={[styles.numInput, errors[`${player.id}-bid`] && styles.inputError]}
               keyboardType="number-pad"
               placeholder="--"
-              placeholderTextColor="#1a1a2e"
+              placeholderTextColor="#2C1810"
               value={bids[player.id]}
               onChangeText={val => setBids(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={2}
@@ -102,7 +102,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
               style={[styles.numInput, errors[`${player.id}-tricks`] && styles.inputError]}
               keyboardType="number-pad"
               placeholder="--"
-              placeholderTextColor="#1a1a2e"
+              placeholderTextColor="#2C1810"
               value={tricks[player.id]}
               onChangeText={val => setTricks(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={2}
@@ -116,6 +116,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
               style={[styles.numInput, errors[`${player.id}-bonus`] && styles.inputError]}
               keyboardType="number-pad"
               placeholder="0"
+              placeholderTextColor="#B8945A"
               value={bonuses[player.id]}
               onChangeText={val => setBonuses(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={3}
@@ -143,37 +144,47 @@ export function RoundEntryScreen({ route, navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    backgroundColor: '#EDD9A3',
+  },
   container: {
     padding: 24,
     gap: 8,
+    flexGrow: 1,
   },
   heading: {
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: '700',
+    color: '#2C1810',
     marginBottom: 12,
   },
   tableHeader: {
     flexDirection: 'row',
-    paddingBottom: 6,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
+    paddingBottom: 8,
+    borderBottomWidth: 2,
+    borderColor: '#B8945A',
     marginBottom: 4,
   },
   headerCell: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#888',
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#7A4E2A',
     textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   playerRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingVertical: 6,
     gap: 8,
+    borderBottomWidth: 1,
+    borderColor: '#D4BA7A',
   },
   nameCell: {
     fontSize: 16,
     paddingTop: 10,
+    color: '#2C1810',
+    fontWeight: '600',
   },
   nameCol: {
     flex: 1.5,
@@ -182,41 +193,50 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   numInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#B8945A',
+    borderRadius: 6,
     paddingHorizontal: 10,
     paddingVertical: 8,
     fontSize: 16,
     textAlign: 'center',
+    backgroundColor: '#FAF0D7',
+    color: '#2C1810',
+    fontWeight: '600',
   },
   inputError: {
-    borderColor: '#e74c3c',
+    borderColor: '#C84B1A',
+    backgroundColor: '#FAE8E0',
   },
   errorText: {
     fontSize: 11,
-    color: '#e74c3c',
+    color: '#C84B1A',
     marginTop: 2,
   },
   bonusHint: {
     marginTop: 12,
     fontSize: 12,
-    color: '#888',
+    color: '#7A4E2A',
     lineHeight: 18,
+    fontStyle: 'italic',
   },
   submitBtn: {
     marginTop: 16,
-    backgroundColor: '#f5c518',
+    backgroundColor: '#C9841A',
     paddingVertical: 14,
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E8A820',
   },
   submitBtnDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#C4B49A',
+    borderColor: '#C4B49A',
   },
   submitBtnText: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#1a1a2e',
+    fontWeight: '700',
+    color: '#2C1810',
+    letterSpacing: 0.5,
   },
 });

@@ -86,21 +86,23 @@ const styles = StyleSheet.create({
   },
   triggerText: {
     fontSize: 15,
-    fontWeight: '600',
-    color: '#f5c518',
+    fontWeight: '700',
+    color: '#C9841A',
   },
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(44,26,10,0.7)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
   },
   sheet: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    backgroundColor: '#EDD9A3',
+    borderRadius: 8,
     width: '100%',
     overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: '#B8945A',
   },
   imageSheet: {
     maxHeight: '90%',
@@ -111,16 +113,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
+    borderBottomWidth: 2,
+    borderColor: '#B8945A',
+    backgroundColor: '#2C1A0A',
   },
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
+    color: '#C9841A',
   },
   closeBtn: {
-    fontSize: 20,
-    color: '#888',
+    fontSize: 18,
+    color: '#D4BA7A',
     paddingHorizontal: 4,
   },
   item: {
@@ -132,15 +136,16 @@ const styles = StyleSheet.create({
   },
   itemBorder: {
     borderBottomWidth: 1,
-    borderColor: '#f0f0f0',
+    borderColor: '#D4BA7A',
   },
   itemText: {
     fontSize: 16,
-    color: '#1a1a2e',
+    color: '#2C1810',
+    fontWeight: '600',
   },
   chevron: {
     fontSize: 22,
-    color: '#bbb',
+    color: '#B8945A',
   },
   imageContent: {
     padding: 12,

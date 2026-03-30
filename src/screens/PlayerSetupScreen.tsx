@@ -35,7 +35,7 @@ export function PlayerSetupScreen({ navigation }: Props) {
   const canStart = names.length >= MIN_PLAYERS && names.every(n => n.trim().length > 0);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
       <Text style={styles.heading}>Who's playing?</Text>
 
       {names.map((name, i) => (
@@ -43,6 +43,7 @@ export function PlayerSetupScreen({ navigation }: Props) {
           <TextInput
             style={styles.input}
             placeholder={`Player ${i + 1}`}
+            placeholderTextColor="#B8945A"
             value={name}
             onChangeText={val => updateName(i, val)}
             maxLength={20}
@@ -73,13 +74,18 @@ export function PlayerSetupScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    backgroundColor: '#EDD9A3',
+  },
   container: {
     padding: 24,
     gap: 12,
+    flexGrow: 1,
   },
   heading: {
-    fontSize: 22,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#2C1810',
     marginBottom: 8,
   },
   row: {
@@ -89,45 +95,51 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#B8945A',
+    borderRadius: 6,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
+    backgroundColor: '#FAF0D7',
+    color: '#2C1810',
   },
   removeBtn: {
     padding: 10,
   },
   removeBtnText: {
     fontSize: 16,
-    color: '#999',
+    color: '#B8945A',
   },
   addBtn: {
-    paddingVertical: 10,
+    paddingVertical: 12,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#B8945A',
+    borderRadius: 6,
     borderStyle: 'dashed',
   },
   addBtnText: {
     fontSize: 16,
-    color: '#666',
+    color: '#7A4E2A',
+    fontWeight: '600',
   },
   startBtn: {
     marginTop: 16,
-    backgroundColor: '#f5c518',
+    backgroundColor: '#C9841A',
     paddingVertical: 14,
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E8A820',
   },
   startBtnDisabled: {
     opacity: 0.4,
   },
   startBtnText: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#1a1a2e',
+    fontWeight: '700',
+    color: '#2C1810',
+    letterSpacing: 0.5,
   },
 });

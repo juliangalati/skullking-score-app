@@ -33,7 +33,7 @@ export function ScoreboardScreen({ navigation }: Props) {
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
       <Text style={styles.heading}>
         {isFinished ? 'Final Scores' : `After Round ${lastRound.number}`}
       </Text>
@@ -68,7 +68,7 @@ export function ScoreboardScreen({ navigation }: Props) {
 
       {isFinished ? (
         <>
-          <Text style={styles.winner}>🏆 {sortedPlayers[0]?.name} wins!</Text>
+          <Text style={styles.winner}>⚓ {sortedPlayers[0]?.name} wins!</Text>
           <TouchableOpacity style={styles.btn} onPress={handleNewGame}>
             <Text style={styles.btnText}>New Game</Text>
           </TouchableOpacity>
@@ -87,76 +87,91 @@ export function ScoreboardScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  scroll: {
+    backgroundColor: '#EDD9A3',
+  },
   container: {
     padding: 24,
     gap: 4,
+    flexGrow: 1,
   },
   heading: {
     fontSize: 22,
-    fontWeight: '600',
+    fontWeight: '700',
+    color: '#2C1810',
     marginBottom: 12,
   },
   tableHeader: {
     flexDirection: 'row',
-    paddingBottom: 6,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
+    paddingBottom: 8,
+    borderBottomWidth: 2,
+    borderColor: '#B8945A',
     marginBottom: 4,
   },
   headerCell: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#888',
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#7A4E2A',
     textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   row: {
     flexDirection: 'row',
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderColor: '#f0f0f0',
+    borderColor: '#D4BA7A',
     alignItems: 'center',
   },
   topRow: {
-    backgroundColor: '#fffbe6',
-    borderRadius: 8,
-    paddingHorizontal: 4,
+    backgroundColor: '#C9841A22',
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    borderBottomWidth: 0,
+    marginBottom: 1,
   },
   cell: {
     fontSize: 16,
+    color: '#2C1810',
   },
   topText: {
     fontWeight: '700',
+    color: '#2C1810',
   },
   rankCol: { flex: 0.5 },
   nameCol: { flex: 2.5 },
   scoreCol: { flex: 1, textAlign: 'right' },
-  pos: { color: '#27ae60' },
-  neg: { color: '#e74c3c' },
-  totalScore: { fontWeight: '600', color: '#1a1a2e' },
+  pos: { color: '#2A6B3A', fontWeight: '600' },
+  neg: { color: '#C84B1A', fontWeight: '600' },
+  totalScore: { fontWeight: '700', color: '#2C1810' },
   winner: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: '700',
     textAlign: 'center',
-    marginTop: 16,
-    marginBottom: 8,
-    color: '#f5c518',
+    marginTop: 20,
+    marginBottom: 4,
+    color: '#C9841A',
+    letterSpacing: 1,
   },
   btn: {
     marginTop: 16,
-    backgroundColor: '#f5c518',
+    backgroundColor: '#C9841A',
     paddingVertical: 14,
-    borderRadius: 8,
+    borderRadius: 6,
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E8A820',
   },
   btnText: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#1a1a2e',
+    fontWeight: '700',
+    color: '#2C1810',
+    letterSpacing: 0.5,
   },
   progress: {
     textAlign: 'center',
-    color: '#aaa',
+    color: '#7A4E2A',
     fontSize: 13,
-    marginTop: 8,
+    marginTop: 10,
+    fontStyle: 'italic',
   },
 });

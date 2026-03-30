@@ -26,9 +26,9 @@ export default function App() {
                 <FaqButton />
               </View>
             ),
-            headerStyle: { backgroundColor: '#1a1a2e' },
-            headerTintColor: '#f5c518',
-            headerTitleStyle: { color: '#fff' },
+            headerStyle: { backgroundColor: '#2C1A0A' },
+            headerTintColor: '#C9841A',
+            headerTitleStyle: { color: '#EDD9A3', fontWeight: '700' },
           }}
         >
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Skull King' }} />
