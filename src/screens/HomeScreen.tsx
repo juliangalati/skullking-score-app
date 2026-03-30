@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
+const COVER_URI = 'https://www.grandpabecksgames.com/cdn/shop/files/sk_rulebook_thumbnail_250x369.jpg';
+
 export function HomeScreen({ navigation }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>☠️ Skull King</Text>
+      <Image source={{ uri: COVER_URI }} style={styles.cover} resizeMode="contain" />
+      <Text style={styles.title}>Skull King</Text>
       <Text style={styles.subtitle}>Score Tracker</Text>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('PlayerSetup')}>
         <Text style={styles.buttonText}>New Game</Text>
@@ -25,15 +28,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#1a1a2e',
     gap: 12,
   },
+  cover: {
+    width: 200,
+    height: 295,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
   title: {
-    fontSize: 48,
+    fontSize: 36,
     fontWeight: 'bold',
     color: '#f5c518',
   },
   subtitle: {
     fontSize: 18,
     color: '#aaa',
-    marginBottom: 32,
+    marginBottom: 16,
   },
   button: {
     backgroundColor: '#f5c518',
