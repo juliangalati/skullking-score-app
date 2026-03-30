@@ -37,4 +37,4 @@ Skull King official rules:
 - **Correct bid (zero):** 10 pts × round number
 - **Incorrect bid:** -10 pts × |tricks won − bid|
 - Validate bids before scoring (bid must be 0 to round number, inclusive)
-- Bonus points for special card captures (Skull King caught by Mermaid, Pirate caught by Skull King, etc.) are tracked separately
+- Bonus points for special card captures (Skull King caught by Mermaid, Pirate caught by Skull King, etc.) are tracked separatelyc
