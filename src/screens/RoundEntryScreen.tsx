@@ -26,6 +26,20 @@ export function RoundEntryScreen({ route, navigation }: Props) {
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const isFormValid = players.every(p => {
+    const bid = bids[p.id];
+    const trick = tricks[p.id];
+    const bonus = bonuses[p.id];
+    const bidVal = parseInt(bid, 10);
+    const trickVal = parseInt(trick, 10);
+    const bonusVal = bonus === '' ? 0 : parseInt(bonus, 10);
+    return (
+      bid !== '' && !isNaN(bidVal) && bidVal >= 0 && bidVal <= roundNumber &&
+      trick !== '' && !isNaN(trickVal) && trickVal >= 0 && trickVal <= roundNumber &&
+      !isNaN(bonusVal) && bonusVal >= 0
+    );
+  });
+
   function handleSubmit() {
     const round = createRound(roundNumber, players);
     round.bidsByPlayerId = Object.fromEntries(
@@ -73,7 +87,8 @@ export function RoundEntryScreen({ route, navigation }: Props) {
             <TextInput
               style={[styles.numInput, errors[`${player.id}-bid`] && styles.inputError]}
               keyboardType="number-pad"
-              placeholder="0"
+              placeholder="--"
+              placeholderTextColor="#1a1a2e"
               value={bids[player.id]}
               onChangeText={val => setBids(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={2}
@@ -86,7 +101,8 @@ export function RoundEntryScreen({ route, navigation }: Props) {
             <TextInput
               style={[styles.numInput, errors[`${player.id}-tricks`] && styles.inputError]}
               keyboardType="number-pad"
-              placeholder="0"
+              placeholder="--"
+              placeholderTextColor="#1a1a2e"
               value={tricks[player.id]}
               onChangeText={val => setTricks(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={2}
@@ -115,7 +131,11 @@ export function RoundEntryScreen({ route, navigation }: Props) {
         Bonus (only if bid exact): +10 std 14 · +20 black 14 · +20 Pirate captures Mermaid · +30 Skull King captures Pirate · +40 Mermaid captures Skull King
       </Text>
 
-      <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+      <TouchableOpacity
+        style={[styles.submitBtn, !isFormValid && styles.submitBtnDisabled]}
+        onPress={handleSubmit}
+        disabled={!isFormValid}
+      >
         <Text style={styles.submitBtnText}>Submit Round</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -190,6 +210,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
+  },
+  submitBtnDisabled: {
+    backgroundColor: '#ccc',
   },
   submitBtnText: {
     fontSize: 18,
