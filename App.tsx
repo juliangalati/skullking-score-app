@@ -1,9 +1,11 @@
 import React from 'react';
+import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/types';
 import { GameProvider } from '@/game/GameContext';
 import { FaqButton } from '@/components/FaqButton';
+import { ReferenceCardsButton } from '@/components/ReferenceCardsButton';
 import { HomeScreen } from '@/screens/HomeScreen';
 import { PlayerSetupScreen } from '@/screens/PlayerSetupScreen';
 import { RoundEntryScreen } from '@/screens/RoundEntryScreen';
@@ -18,7 +20,12 @@ export default function App() {
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
-            headerRight: () => <FaqButton />,
+            headerRight: () => (
+              <View style={{ flexDirection: 'row' }}>
+                <ReferenceCardsButton />
+                <FaqButton />
+              </View>
+            ),
             headerStyle: { backgroundColor: '#1a1a2e' },
             headerTintColor: '#f5c518',
             headerTitleStyle: { color: '#fff' },
