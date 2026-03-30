@@ -75,7 +75,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
               keyboardType="number-pad"
               placeholder="0"
               value={bids[player.id]}
-              onChangeText={val => setBids(prev => ({ ...prev, [player.id]: val }))}
+              onChangeText={val => setBids(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={2}
             />
             {errors[`${player.id}-bid`] && (
@@ -88,7 +88,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
               keyboardType="number-pad"
               placeholder="0"
               value={tricks[player.id]}
-              onChangeText={val => setTricks(prev => ({ ...prev, [player.id]: val }))}
+              onChangeText={val => setTricks(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={2}
             />
             {errors[`${player.id}-tricks`] && (
@@ -101,7 +101,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
               keyboardType="number-pad"
               placeholder="0"
               value={bonuses[player.id]}
-              onChangeText={val => setBonuses(prev => ({ ...prev, [player.id]: val }))}
+              onChangeText={val => setBonuses(prev => ({ ...prev, [player.id]: val.replace(/[^0-9]/g, '') }))}
               maxLength={3}
             />
             {errors[`${player.id}-bonus`] && (
