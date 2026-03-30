@@ -122,13 +122,7 @@ const styles = StyleSheet.create({
     borderColor: '#D4BA7A',
     alignItems: 'center',
   },
-  topRow: {
-    backgroundColor: '#C9841A22',
-    borderRadius: 6,
-    paddingHorizontal: 6,
-    borderBottomWidth: 0,
-    marginBottom: 1,
-  },
+  topRow: {},
   cell: {
     fontSize: 16,
     color: '#2C1810',
