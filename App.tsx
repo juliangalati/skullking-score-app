@@ -17,7 +17,7 @@ export default function App() {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
           <Stack.Screen name="PlayerSetup" component={PlayerSetupScreen} options={{ title: 'Players' }} />
-          <Stack.Screen name="RoundEntry" component={RoundEntryScreen} />
+          <Stack.Screen name="RoundEntry" component={RoundEntryScreen} options={({ route }) => ({ title: `Round ${route.params.roundNumber}` })} />
           <Stack.Screen name="Scoreboard" component={ScoreboardScreen} options={{ headerBackVisible: false }} />
         </Stack.Navigator>
       </NavigationContainer>
