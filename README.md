@@ -13,8 +13,9 @@ A mobile app for tracking scores in the [Skull King](https://www.grandpabecksgam
 
 ## Tech Stack
 
-- [React Native](https://reactnative.dev/) via [Expo](https://expo.dev/)
+- [React Native](https://reactnative.dev/) via [Expo](https://expo.dev/) (managed workflow)
 - [TypeScript](https://www.typescriptlang.org/)
+- [React Navigation](https://reactnavigation.org/) (native-stack)
 
 ## Prerequisites
 
@@ -34,29 +35,45 @@ cd skullking-score-app
 npm install
 
 # Start the Expo development server
-npx expo start
+npm start
 ```
 
 Then scan the QR code with Expo Go, or press `i` / `a` to open in a simulator.
+
+```bash
+# Run scoring unit tests (no test framework required)
+npx tsx src/game/__tests__/scoring.test.ts
+```
 
 ## Project Structure
 
 ```
 skullking-score-app/
-├── app/              # Screens and navigation (Expo Router)
-├── components/       # Reusable UI components
-├── hooks/            # Custom React hooks
-├── utils/            # Score calculation logic and helpers
-├── types/            # Shared TypeScript types
+├── App.tsx           # Entry point — NavigationContainer + NativeStack navigator
+├── src/
+│   ├── components/   # Reusable UI components
+│   ├── screens/      # HomeScreen, PlayerSetupScreen, RoundEntryScreen, ScoreboardScreen
+│   ├── types/        # Shared TypeScript types (Player, Round, Game, RootStackParamList)
+│   ├── utils/        # Pure helper functions (generateId, etc.)
+│   ├── game/         # Scoring rules and game logic (pure functions, no UI dependencies)
+│   │   ├── scoring.ts          # calculatePlayerRoundScore, calculateRoundScores, calculateTotals
+│   │   ├── game.ts             # createGame, createRound, applyRoundScores, validateRoundInput
+│   │   ├── index.ts            # Barrel re-export
+│   │   └── __tests__/          # Scoring unit tests (run with: npx tsx src/game/__tests__/scoring.test.ts)
+│   └── constants/    # Static config (TOTAL_ROUNDS, MIN/MAX_PLAYERS)
 └── assets/           # Images, fonts, icons
 ```
 
 ## Scoring Rules
 
-- **Correct bid (non-zero):** 20 points × tricks won
-- **Correct bid (zero):** 10 points × round number
-- **Incorrect bid:** -10 points × tricks off from bid
-- **Special cards** (Skull King, Mermaids, Pirates) add bonus points when captured
+| Outcome | Points |
+|---|---|
+| Exact non-zero bid | `bid × 20` |
+| Exact zero bid | `roundNumber × 10` |
+| Missed bid (any) | `-10 × \|bid − tricksWon\|` |
+| Failed zero bid | `roundNumber × -10` |
+
+Bonus points for special card captures (Skull King caught by Mermaid, etc.) are not yet implemented.
 
 > Full rules: [Skull King rulebook](https://www.grandpabecksgames.com/skull-king)
 

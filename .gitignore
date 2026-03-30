@@ -36,3 +36,15 @@ Thumbs.db
 
 # Jest
 coverage/
+
+# Local instructions
+Instructions.md
+
+# Tooling / local config
+.claude/
+.agents/
+.sfdx/
+skills-lock.json
+
+# Test artifacts
+screenshots/

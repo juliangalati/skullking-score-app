@@ -6,22 +6,27 @@ React Native mobile app to track scores in the Skull King card game. Supports mu
 ## Tech Stack
 - React Native via Expo (managed workflow)
 - TypeScript
-- Expo Router (file-based navigation)
+- React Navigation (native-stack) — NOT Expo Router
 
 ## Project Structure
 ```
-app/          # Screens and navigation (Expo Router)
-components/   # Reusable UI components
-hooks/        # Custom React hooks
-utils/        # Score calculation logic and helpers
-types/        # Shared TypeScript types
-assets/       # Images, fonts, icons
+App.tsx           # Entry point — NavigationContainer + NativeStack navigator
+src/
+  components/     # Reusable UI components
+  screens/        # HomeScreen, PlayerSetupScreen, RoundEntryScreen, ScoreboardScreen
+  types/          # Shared TypeScript types (Player, Round, Game, RootStackParamList)
+  utils/          # Pure helper functions
+  game/           # Scoring rules and game logic (calculateRoundScore)
+  constants/      # Static config (TOTAL_ROUNDS, MIN_PLAYERS, MAX_PLAYERS)
+assets/           # Images, fonts, icons
 ```
 
 ## Development
 ```bash
 npm install
-npx expo start
+npm start        # expo start
+npm run ios      # open in iOS simulator
+npm run android  # open in Android emulator
 ```
 
 ## Code Rules
