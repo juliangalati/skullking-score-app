@@ -28,7 +28,7 @@ A mobile app for tracking scores in the [Skull King](https://www.grandpabecksgam
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/skullking-score-app.git
+git clone https://github.com/juliangalati/skullking-score-app.git
 cd skullking-score-app
 
 # Install dependencies
