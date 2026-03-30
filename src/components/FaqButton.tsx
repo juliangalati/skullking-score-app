@@ -57,23 +57,25 @@ export function FaqButton() {
         <Text style={styles.triggerText}>FAQ</Text>
       </TouchableOpacity>
 
-      <Modal visible={visible} animationType="slide" onRequestClose={() => setVisible(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>Frequently Asked Questions</Text>
-            <TouchableOpacity onPress={() => setVisible(false)}>
-              <Text style={styles.closeBtn}>✕</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView contentContainerStyle={styles.modalContent}>
-            {FAQ.map((item, i) => (
-              <View key={i} style={styles.faqItem}>
-                <Text style={styles.question}>Q: {item.q}</Text>
-                <Text style={styles.answer}>A: {item.a}</Text>
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+      <Modal visible={visible} animationType="fade" transparent onRequestClose={() => setVisible(false)}>
+        <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={() => setVisible(false)}>
+          <TouchableOpacity style={styles.sheet} activeOpacity={1} onPress={() => {}}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>FAQ</Text>
+              <TouchableOpacity onPress={() => setVisible(false)}>
+                <Text style={styles.closeBtn}>✕</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView contentContainerStyle={styles.modalContent}>
+              {FAQ.map((item, i) => (
+                <View key={i} style={styles.faqItem}>
+                  <Text style={styles.question}>Q: {item.q}</Text>
+                  <Text style={styles.answer}>A: {item.a}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          </TouchableOpacity>
+        </TouchableOpacity>
       </Modal>
     </>
   );
@@ -89,9 +91,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#f5c518',
   },
-  modalContainer: {
+  backdrop: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+  sheet: {
     backgroundColor: '#fff',
+    borderRadius: 12,
+    width: '100%',
+    maxHeight: '80%',
+    overflow: 'hidden',
   },
   modalHeader: {
     flexDirection: 'row',
