@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/types';
 import { TOTAL_ROUNDS } from '@/constants';
@@ -7,6 +8,8 @@ import { useGame } from '@/game/GameContext';
 import { calculateTotals } from '@/game';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Scoreboard'>;
+
+const PLAYER_COLORS = ['#C9841A', '#C84B1A', '#5A8FA8', '#2A6B3A', '#7A4E8A', '#E8821A'];
 
 export function ScoreboardScreen({ navigation }: Props) {
   const { game, resetGame } = useGame();
@@ -22,6 +25,27 @@ export function ScoreboardScreen({ navigation }: Props) {
   const sortedPlayers = [...players].sort(
     (a, b) => (totals[b.id] ?? 0) - (totals[a.id] ?? 0)
   );
+
+  // Cumulative score per player per round for the chart
+  const cumulativeByPlayer: Record<string, number[]> = {};
+  for (const player of players) {
+    let running = 0;
+    cumulativeByPlayer[player.id] = rounds.map(r => {
+      running += r.scoresByPlayerId[player.id] ?? 0;
+      return running;
+    });
+  }
+
+  const chartWidth = Dimensions.get('window').width - 48;
+
+  const chartData = {
+    labels: rounds.map(r => String(r.number)),
+    datasets: players.map((p, i) => ({
+      data: cumulativeByPlayer[p.id],
+      color: () => PLAYER_COLORS[i % PLAYER_COLORS.length],
+      strokeWidth: 2.5,
+    })),
+  };
 
   function handleNext() {
     navigation.navigate('RoundEntry', { roundNumber: nextRoundNumber });
@@ -48,14 +72,19 @@ export function ScoreboardScreen({ navigation }: Props) {
       {sortedPlayers.map((player, index) => {
         const roundScore = lastRound?.scoresByPlayerId[player.id] ?? 0;
         const total = totals[player.id] ?? 0;
+        const playerIndex = players.findIndex(p => p.id === player.id);
+        const color = PLAYER_COLORS[playerIndex % PLAYER_COLORS.length];
         return (
           <View key={player.id} style={[styles.row, index === 0 && styles.topRow]}>
             <Text style={[styles.cell, styles.rankCol, index === 0 && styles.topText]}>
               {index + 1}
             </Text>
-            <Text style={[styles.cell, styles.nameCol, index === 0 && styles.topText]} numberOfLines={1}>
-              {player.name}
-            </Text>
+            <View style={[styles.nameCol, styles.nameWithDot]}>
+              <View style={[styles.dot, { backgroundColor: color }]} />
+              <Text style={[styles.cell, index === 0 && styles.topText]} numberOfLines={1}>
+                {player.name}
+              </Text>
+            </View>
             <Text style={[styles.cell, styles.scoreCol, roundScore >= 0 ? styles.pos : styles.neg]}>
               {roundScore >= 0 ? '+' : ''}{roundScore}
             </Text>
@@ -65,6 +94,30 @@ export function ScoreboardScreen({ navigation }: Props) {
           </View>
         );
       })}
+
+      {/* Score progression chart */}
+      {rounds.length >= 1 && (
+        <View style={styles.chartSection}>
+          <Text style={styles.chartTitle}>Score Progression</Text>
+          <LineChart
+            data={chartData}
+            width={chartWidth}
+            height={220}
+            chartConfig={{
+              backgroundColor: '#FAF0D7',
+              backgroundGradientFrom: '#FAF0D7',
+              backgroundGradientTo: '#EDD9A3',
+              decimalPlaces: 0,
+              color: (opacity = 1) => `rgba(44, 24, 16, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(90, 60, 30, ${opacity})`,
+              propsForDots: { r: '4', strokeWidth: '2' },
+              propsForBackgroundLines: { stroke: '#D4BA7A', strokeDasharray: '4,4' },
+            }}
+            bezier
+            style={styles.chart}
+          />
+        </View>
+      )}
 
       {isFinished ? (
         <>
@@ -133,10 +186,37 @@ const styles = StyleSheet.create({
   },
   rankCol: { flex: 0.5 },
   nameCol: { flex: 2.5 },
+  nameWithDot: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
   scoreCol: { flex: 1, textAlign: 'right' },
   pos: { color: '#2A6B3A', fontWeight: '600' },
   neg: { color: '#C84B1A', fontWeight: '600' },
   totalScore: { fontWeight: '700', color: '#2C1810' },
+  chartSection: {
+    marginTop: 24,
+    marginBottom: 8,
+  },
+  chartTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#7A4E2A',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 10,
+  },
+  chart: {
+    borderRadius: 8,
+    borderWidth: 1.5,
+    borderColor: '#B8945A',
+  },
   winner: {
     fontSize: 22,
     fontWeight: '700',
