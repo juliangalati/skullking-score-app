@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
+import { ScoreChart } from '@/components/ScoreChart';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/types';
 import { TOTAL_ROUNDS } from '@/constants';
@@ -37,15 +37,6 @@ export function ScoreboardScreen({ navigation }: Props) {
   }
 
   const chartWidth = Dimensions.get('window').width - 48;
-
-  const chartData = {
-    labels: rounds.map(r => String(r.number)),
-    datasets: players.map((p, i) => ({
-      data: cumulativeByPlayer[p.id],
-      color: () => PLAYER_COLORS[i % PLAYER_COLORS.length],
-      strokeWidth: 2.5,
-    })),
-  };
 
   function handleNext() {
     navigation.navigate('RoundEntry', { roundNumber: nextRoundNumber });
@@ -99,23 +90,15 @@ export function ScoreboardScreen({ navigation }: Props) {
       {rounds.length >= 1 && (
         <View style={styles.chartSection}>
           <Text style={styles.chartTitle}>Score Progression</Text>
-          <LineChart
-            data={chartData}
-            width={chartWidth}
-            height={220}
-            chartConfig={{
-              backgroundColor: '#FAF0D7',
-              backgroundGradientFrom: '#FAF0D7',
-              backgroundGradientTo: '#EDD9A3',
-              decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(44, 24, 16, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(90, 60, 30, ${opacity})`,
-              propsForDots: { r: '4', strokeWidth: '2' },
-              propsForBackgroundLines: { stroke: '#D4BA7A', strokeDasharray: '4,4' },
-            }}
-            bezier
-            style={styles.chart}
-          />
+          <View style={styles.chart}>
+            <ScoreChart
+              players={players}
+              cumulativeByPlayer={cumulativeByPlayer}
+              colors={PLAYER_COLORS}
+              width={chartWidth}
+              height={220}
+            />
+          </View>
         </View>
       )}
 
