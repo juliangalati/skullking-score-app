@@ -15,7 +15,7 @@ export function ReferenceCardsButton() {
   const [selected, setSelected] = useState<number | null>(null);
 
   const { width, height } = Dimensions.get('window');
-  const imgWidth = width - 48;
+  const imgWidth = width - 96;
   const imgHeight = imgWidth * (369 / 250); // preserve aspect ratio of reference cards
 
   return (
@@ -81,11 +81,16 @@ export function ReferenceCardsButton() {
 
 const styles = StyleSheet.create({
   trigger: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#C9841A',
+    backgroundColor: 'rgba(201,132,26,0.12)',
+    marginHorizontal: 3,
   },
   triggerText: {
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: '700',
     color: '#C9841A',
   },
@@ -94,7 +99,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(44,26,10,0.7)',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 24,
+    paddingHorizontal: 48,
+    paddingVertical: 24,
   },
   sheet: {
     backgroundColor: '#EDD9A3',

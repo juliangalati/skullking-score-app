@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/types';
 import { GameProvider } from '@/game/GameContext';
+import { CardCountsButton } from '@/components/CardCountsButton';
 import { FaqButton } from '@/components/FaqButton';
 import { ReferenceCardsButton } from '@/components/ReferenceCardsButton';
 import { HomeScreen } from '@/screens/HomeScreen';
@@ -21,7 +22,8 @@ export default function App() {
           initialRouteName="Home"
           screenOptions={{
             headerRight: () => (
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{ flexDirection: 'row', marginRight: 8 }}>
+                <CardCountsButton />
                 <ReferenceCardsButton />
                 <FaqButton />
               </View>
