@@ -161,12 +161,10 @@ const styles = StyleSheet.create({
   topRow: {},
   cell: {
     fontSize: 16,
-    color: '#2C1810',
-  },
-  topText: {
     fontWeight: '700',
     color: '#2C1810',
   },
+  topText: {},
   rankCol: { flex: 0.5 },
   nameCol: { flex: 2.5 },
   nameWithDot: {
