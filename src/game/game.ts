@@ -39,7 +39,7 @@ export function applyRoundScores(round: Round, players: Player[]): Round {
 
 // ─── Validation ────────────────────────────────────────────────────────────────
 
-export type ValidationError = { playerId: string; field: 'bid' | 'tricks' | 'bonus'; message: string };
+export type ValidationError = { playerId: string; field: 'bid' | 'tricks' | 'bonus' | 'tricks_total'; message: string };
 
 /**
  * Basic validation before accepting a round's input.
@@ -49,6 +49,7 @@ export type ValidationError = { playerId: string; field: 'bid' | 'tricks' | 'bon
  *   - bid must be in [0, roundNumber]
  *   - tricksWon must be in [0, roundNumber]
  *   - bonus must be >= 0
+ *   - sum of all tricks must equal roundNumber
  *   - every player must have an entry in all maps
  */
 export function validateRoundInput(round: Round, players: Player[]): ValidationError[] {
@@ -69,6 +70,17 @@ export function validateRoundInput(round: Round, players: Player[]): ValidationE
     if (bonus === undefined || bonus < 0) {
       errors.push({ playerId: player.id, field: 'bonus', message: 'Bonus must be ≥ 0' });
     }
+  }
+
+  const totalTricks = players.reduce(
+    (sum, p) => sum + (round.tricksByPlayerId[p.id] ?? 0), 0
+  );
+  if (totalTricks !== max) {
+    errors.push({
+      playerId: '',
+      field: 'tricks_total',
+      message: `Tricks must add up to ${max} (currently ${totalTricks})`,
+    });
   }
 
   return errors;

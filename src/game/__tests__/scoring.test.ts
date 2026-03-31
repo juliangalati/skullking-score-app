@@ -4,6 +4,7 @@
  */
 
 import { calculatePlayerRoundScore, calculateRoundScores, calculateTotals } from '../scoring';
+import { validateRoundInput } from '../game';
 import type { Player, Round } from '@/types';
 
 // ─── Minimal test harness ────────────────────────────────────────────────────
@@ -114,6 +115,32 @@ const rounds: Round[] = [
 const totals = calculateTotals(rounds);
 expect('Alice total (20+40)', totals['p1'], 60);
 expect('Bob total (-10+20)', totals['p2'], 10);
+
+// ─── validateRoundInput: tricks sum ──────────────────────────────────────────
+
+console.log('\nvalidateRoundInput — tricks sum');
+
+const validRound: Round = {
+  number: 3,
+  bidsByPlayerId:    { p1: 1, p2: 2 },
+  tricksByPlayerId:  { p1: 1, p2: 2 },   // sum = 3 ✓
+  bonusByPlayerId:   { p1: 0, p2: 0 },
+  scoresByPlayerId:  { p1: 0, p2: 0 },
+};
+const invalidRound: Round = {
+  number: 3,
+  bidsByPlayerId:    { p1: 1, p2: 2 },
+  tricksByPlayerId:  { p1: 2, p2: 2 },   // sum = 4 ✗
+  bonusByPlayerId:   { p1: 0, p2: 0 },
+  scoresByPlayerId:  { p1: 0, p2: 0 },
+};
+
+const validErrs   = validateRoundInput(validRound,   players);
+const invalidErrs = validateRoundInput(invalidRound, players);
+
+expect('no error when tricks sum equals round', validErrs.length, 0);
+expect('error when tricks sum exceeds round',
+  invalidErrs.some(e => e.field === 'tricks_total'), true);
 
 // ─── Summary ────────────────────────────────────────────────────────────────
 

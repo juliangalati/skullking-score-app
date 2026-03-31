@@ -25,6 +25,7 @@ export function RoundEntryScreen({ route, navigation }: Props) {
     Object.fromEntries(players.map(p => [p.id, '']))
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [globalError, setGlobalError] = useState<string>('');
 
   const isFormValid = players.every(p => {
     const bid = bids[p.id];
@@ -55,14 +56,21 @@ export function RoundEntryScreen({ route, navigation }: Props) {
     const validationErrors = validateRoundInput(round, players);
     if (validationErrors.length > 0) {
       const errMap: Record<string, string> = {};
+      let global = '';
       for (const e of validationErrors) {
-        errMap[`${e.playerId}-${e.field}`] = e.message;
+        if (e.field === 'tricks_total') {
+          global = e.message;
+        } else {
+          errMap[`${e.playerId}-${e.field}`] = e.message;
+        }
       }
       setErrors(errMap);
+      setGlobalError(global);
       return;
     }
 
     setErrors({});
+    setGlobalError('');
     submitRound(round);
     navigation.navigate('Scoreboard');
   }
@@ -127,6 +135,12 @@ export function RoundEntryScreen({ route, navigation }: Props) {
           </View>
         </View>
       ))}
+
+      {globalError !== '' && (
+        <View style={styles.globalErrorBanner}>
+          <Text style={styles.globalErrorText}>{globalError}</Text>
+        </View>
+      )}
 
       <Text style={styles.bonusHint}>
         Bonus (only if bid exact): +10 std 14 · +20 black 14 · +20 Pirate captures Mermaid · +30 Skull King captures Pirate · +40 Mermaid captures Skull King
@@ -212,6 +226,21 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#C84B1A',
     marginTop: 2,
+  },
+  globalErrorBanner: {
+    marginTop: 12,
+    backgroundColor: '#FAE8E0',
+    borderWidth: 1.5,
+    borderColor: '#C84B1A',
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  globalErrorText: {
+    color: '#C84B1A',
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   bonusHint: {
     marginTop: 12,
