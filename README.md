@@ -6,9 +6,11 @@ A mobile app for tracking scores in the [Skull King](https://www.grandpabecksgam
 
 - Add and manage players for each game session
 - Track rounds 1 through 10
-- Record bids and tricks won per player per round
-- Automatic score calculation following official Skull King rules
-- Running totals visible throughout the game
+- Record bids, tricks won, and bonus points per player per round
+- Automatic score calculation following official Skull King rules (including bonus points)
+- Input validation: submit blocked until all bids/tricks are filled and tricks sum to the round number
+- Running totals and score progression chart visible throughout the game
+- In-app FAQ and Reference Cards viewer
 - Final results screen at game end
 
 ## Tech Stack
@@ -52,12 +54,18 @@ skullking-score-app/
 ├── App.tsx           # Entry point — NavigationContainer + NativeStack navigator
 ├── src/
 │   ├── components/   # Reusable UI components
+│   │   ├── ScoreChart.tsx          # Custom SVG score progression line chart
+│   │   ├── CardCountsButton.tsx    # Header button — card counts reference popup
+│   │   ├── ReferenceCardsButton.tsx # Header button — reference card image viewer
+│   │   ├── FaqButton.tsx           # Header button — FAQ modal
+│   │   └── index.ts                # Barrel re-export
 │   ├── screens/      # HomeScreen, PlayerSetupScreen, RoundEntryScreen, ScoreboardScreen
 │   ├── types/        # Shared TypeScript types (Player, Round, Game, RootStackParamList)
 │   ├── utils/        # Pure helper functions (generateId, etc.)
-│   ├── game/         # Scoring rules and game logic (pure functions, no UI dependencies)
+│   ├── game/         # Scoring rules and game logic
 │   │   ├── scoring.ts          # calculatePlayerRoundScore, calculateRoundScores, calculateTotals
 │   │   ├── game.ts             # createGame, createRound, applyRoundScores, validateRoundInput
+│   │   ├── GameContext.tsx     # React context — shared game state across screens
 │   │   ├── index.ts            # Barrel re-export
 │   │   └── __tests__/          # Scoring unit tests (run with: npx tsx src/game/__tests__/scoring.test.ts)
 │   └── constants/    # Static config (TOTAL_ROUNDS, MIN/MAX_PLAYERS)
@@ -68,18 +76,25 @@ skullking-score-app/
 
 | Outcome | Points |
 |---|---|
-| Exact non-zero bid | `bid × 20` |
-| Exact zero bid | `roundNumber × 10` |
+| Exact non-zero bid | `bid × 20 + bonus` |
+| Exact zero bid | `roundNumber × 10 + bonus` |
 | Missed bid (any) | `-10 × \|bid − tricksWon\|` |
 | Failed zero bid | `roundNumber × -10` |
 
-Bonus points for special card captures (Skull King caught by Mermaid, etc.) are not yet implemented.
+Bonus points are awarded only when the bid is exact:
+
+| Bonus Event | Points |
+|---|---|
+| Standard-suit (#14 in green/purple/yellow) captured | +10 |
+| Black (#14 trump) captured | +20 |
+| Mermaid captured by a Pirate | +20 |
+| Pirate captured by the Skull King | +30 |
+| Skull King captured by a Mermaid | +40 |
 
 > Full rules: [Skull King rulebook](https://www.grandpabecksgames.com/skull-king)
 
 ## Future Improvements
 
-- Bonus points for special card captures (Skull King captured by Mermaid, etc.)
 - Game history and persistent storage
 - Multiple concurrent game sessions
 - Player stats across sessions
