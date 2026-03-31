@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, Modal, ScrollView, StyleSheet, Dimensions,
+  View, Text, Image, TouchableOpacity, Modal, ScrollView, StyleSheet, useWindowDimensions,
 } from 'react-native';
+import { headerButtonStyles } from './headerButtonStyles';
 
 const CARDS = [
   { title: 'Card Hierarchy',   image: require('../../assets/reference/card-hierarchy.png') },
@@ -14,14 +15,14 @@ export function ReferenceCardsButton() {
   const [listVisible, setListVisible] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
 
-  const { width, height } = Dimensions.get('window');
+  const { width } = useWindowDimensions();
   const imgWidth = width - 96;
   const imgHeight = imgWidth * (369 / 250); // preserve aspect ratio of reference cards
 
   return (
     <>
-      <TouchableOpacity style={styles.trigger} onPress={() => setListVisible(true)}>
-        <Text style={styles.triggerText}>Reference Cards</Text>
+      <TouchableOpacity style={headerButtonStyles.trigger} onPress={() => setListVisible(true)}>
+        <Text style={headerButtonStyles.triggerText}>Reference Cards</Text>
       </TouchableOpacity>
 
       {/* List popup */}
@@ -58,7 +59,7 @@ export function ReferenceCardsButton() {
         <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={() => setSelected(null)}>
           <TouchableOpacity style={[styles.sheet, styles.imageSheet]} activeOpacity={1} onPress={() => {}}>
             <View style={styles.header}>
-              <Text style={styles.headerTitle}>{selected !== null ? CARDS[selected].title : ''}</Text>
+              <Text style={styles.headerTitle}>{CARDS[selected!].title}</Text>
               <TouchableOpacity onPress={() => setSelected(null)}>
                 <Text style={styles.closeBtn}>✕</Text>
               </TouchableOpacity>
@@ -80,20 +81,6 @@ export function ReferenceCardsButton() {
 }
 
 const styles = StyleSheet.create({
-  trigger: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#C9841A',
-    backgroundColor: 'rgba(201,132,26,0.12)',
-    marginHorizontal: 3,
-  },
-  triggerText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#C9841A',
-  },
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(44,26,10,0.7)',

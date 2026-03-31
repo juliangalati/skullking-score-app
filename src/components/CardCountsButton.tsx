@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { headerButtonStyles } from './headerButtonStyles';
 
 const CARD_COUNTS = [
   { label: 'Skull King', count: 1 },
@@ -14,8 +15,8 @@ export function CardCountsButton() {
 
   return (
     <>
-      <TouchableOpacity style={styles.trigger} onPress={() => setVisible(true)}>
-        <Text style={styles.triggerText}>Card Counts</Text>
+      <TouchableOpacity style={headerButtonStyles.trigger} onPress={() => setVisible(true)}>
+        <Text style={headerButtonStyles.triggerText}>Card Counts</Text>
       </TouchableOpacity>
 
       <Modal visible={visible} animationType="fade" transparent onRequestClose={() => setVisible(false)}>
@@ -44,20 +45,6 @@ export function CardCountsButton() {
 }
 
 const styles = StyleSheet.create({
-  trigger: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#C9841A',
-    backgroundColor: 'rgba(201,132,26,0.12)',
-    marginHorizontal: 3,
-  },
-  triggerText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#C9841A',
-  },
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(44,26,10,0.7)',

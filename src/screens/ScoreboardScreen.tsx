@@ -67,19 +67,19 @@ export function ScoreboardScreen({ navigation }: Props) {
         const color = PLAYER_COLORS[playerIndex % PLAYER_COLORS.length];
         return (
           <View key={player.id} style={[styles.row, index === 0 && styles.topRow]}>
-            <Text style={[styles.cell, styles.rankCol, index === 0 && styles.topText]}>
+            <Text style={[styles.cell, styles.rankCol]}>
               {index + 1}
             </Text>
             <View style={[styles.nameCol, styles.nameWithDot]}>
               <View style={[styles.dot, { backgroundColor: color }]} />
-              <Text style={[styles.cell, index === 0 && styles.topText]} numberOfLines={1}>
+              <Text style={styles.cell} numberOfLines={1}>
                 {player.name}
               </Text>
             </View>
             <Text style={[styles.cell, styles.scoreCol, roundScore >= 0 ? styles.pos : styles.neg]}>
               {roundScore >= 0 ? '+' : ''}{roundScore}
             </Text>
-            <Text style={[styles.cell, styles.scoreCol, styles.totalScore, index === 0 && styles.topText]}>
+            <Text style={[styles.cell, styles.scoreCol, styles.totalScore]}>
               {total}
             </Text>
           </View>
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#2C1810',
   },
-  topText: {},
   rankCol: { flex: 0.5 },
   nameCol: { flex: 2.5 },
   nameWithDot: {
