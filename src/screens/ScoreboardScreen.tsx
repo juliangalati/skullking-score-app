@@ -11,16 +11,18 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Scoreboard'>;
 
 const PLAYER_COLORS = ['#C9841A', '#C84B1A', '#5A8FA8', '#2A6B3A', '#7A4E8A', '#E8821A'];
 
-export function ScoreboardScreen({ navigation }: Props) {
+export function ScoreboardScreen({ navigation, route }: Props) {
+  const { displayRound } = route.params;
   const { game, resetGame } = useGame();
 
   if (!game) return null;
 
-  const { players, rounds, status } = game;
+  const { players } = game;
+  const rounds = game.rounds.slice(0, displayRound);
   const lastRound = rounds[rounds.length - 1];
   const totals = calculateTotals(rounds);
-  const isFinished = status === 'finished';
-  const nextRoundNumber = rounds.length + 1;
+  const isFinished = displayRound >= TOTAL_ROUNDS;
+  const nextRoundNumber = displayRound + 1;
 
   const sortedPlayers = [...players].sort(
     (a, b) => (totals[b.id] ?? 0) - (totals[a.id] ?? 0)

@@ -28,5 +28,5 @@ export type RootStackParamList = {
   Home: undefined;
   PlayerSetup: undefined;
   RoundEntry: { roundNumber: number };
-  Scoreboard: undefined;
+  Scoreboard: { displayRound: number };
 };

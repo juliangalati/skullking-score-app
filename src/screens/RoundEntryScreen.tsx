@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet,
+  View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Alert,
 } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '@/types';
@@ -12,20 +12,43 @@ type Props = NativeStackScreenProps<RootStackParamList, 'RoundEntry'>;
 
 export function RoundEntryScreen({ route, navigation }: Props) {
   const { roundNumber } = route.params;
-  const { game, submitRound } = useGame();
+  const { game, submitRound, updateRound, resetGame } = useGame();
   const players = game?.players ?? [];
+  const existingRound = game?.rounds.find(r => r.number === roundNumber);
 
   const [bids, setBids] = useState<Record<string, string>>(
-    Object.fromEntries(players.map(p => [p.id, '']))
+    Object.fromEntries(players.map(p => [p.id, existingRound ? String(existingRound.bidsByPlayerId[p.id] ?? '') : '']))
   );
   const [tricks, setTricks] = useState<Record<string, string>>(
-    Object.fromEntries(players.map(p => [p.id, '']))
+    Object.fromEntries(players.map(p => [p.id, existingRound ? String(existingRound.tricksByPlayerId[p.id] ?? '') : '']))
   );
   const [bonuses, setBonuses] = useState<Record<string, string>>(
-    Object.fromEntries(players.map(p => [p.id, '']))
+    Object.fromEntries(players.map(p => [p.id, existingRound ? String(existingRound.bonusByPlayerId[p.id] ?? '') : '']))
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [globalError, setGlobalError] = useState<string>('');
+
+  useEffect(() => {
+    if (roundNumber !== 1) return;
+    return navigation.addListener('beforeRemove', e => {
+      e.preventDefault();
+      Alert.alert(
+        'Exit Game?',
+        'This will end the current game and go back to player setup.',
+        [
+          { text: 'No', style: 'cancel' },
+          {
+            text: 'Yes',
+            style: 'destructive',
+            onPress: () => {
+              resetGame();
+              navigation.dispatch(e.data.action);
+            },
+          },
+        ]
+      );
+    });
+  }, [navigation, roundNumber, resetGame]);
 
   const isFormValid = players.every(p => {
     const bid = bids[p.id];
@@ -71,8 +94,12 @@ export function RoundEntryScreen({ route, navigation }: Props) {
 
     setErrors({});
     setGlobalError('');
-    submitRound(round);
-    navigation.navigate('Scoreboard');
+    if (existingRound) {
+      updateRound(round);
+    } else {
+      submitRound(round);
+    }
+    navigation.navigate('Scoreboard', { displayRound: roundNumber });
   }
 
   return (
