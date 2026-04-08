@@ -16,7 +16,7 @@ export function CardCountsButton() {
   return (
     <>
       <TouchableOpacity style={headerButtonStyles.trigger} onPress={() => setVisible(true)}>
-        <Text style={headerButtonStyles.triggerText}>Card Counts</Text>
+        <Text style={headerButtonStyles.triggerText}>Cards</Text>
       </TouchableOpacity>
 
       <Modal visible={visible} animationType="fade" transparent onRequestClose={() => setVisible(false)}>

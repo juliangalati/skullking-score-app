@@ -22,7 +22,7 @@ export function ReferenceCardsButton() {
   return (
     <>
       <TouchableOpacity style={headerButtonStyles.trigger} onPress={() => setListVisible(true)}>
-        <Text style={headerButtonStyles.triggerText}>Reference Cards</Text>
+        <Text style={headerButtonStyles.triggerText}>Reference</Text>
       </TouchableOpacity>
 
       {/* List popup */}

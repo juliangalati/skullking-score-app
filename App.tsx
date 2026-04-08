@@ -22,7 +22,7 @@ export default function App() {
           initialRouteName="Home"
           screenOptions={{
             headerRight: () => (
-              <View style={{ flexDirection: 'row', marginRight: 8 }}>
+              <View style={{ flexDirection: 'row', marginRight: -8 }}>
                 <CardCountsButton />
                 <ReferenceCardsButton />
                 <FaqButton />
