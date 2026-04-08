@@ -58,21 +58,23 @@ export function ReferenceCardsButton() {
       >
         <TouchableOpacity style={styles.backdrop} activeOpacity={1} onPress={() => setSelected(null)}>
           <TouchableOpacity style={[styles.sheet, styles.imageSheet]} activeOpacity={1} onPress={() => {}}>
-            <View style={styles.header}>
-              <Text style={styles.headerTitle}>{CARDS[selected!].title}</Text>
-              <TouchableOpacity onPress={() => setSelected(null)}>
-                <Text style={styles.closeBtn}>✕</Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView contentContainerStyle={styles.imageContent}>
-              {selected !== null && (
-                <Image
-                  source={CARDS[selected].image}
-                  style={{ width: imgWidth, height: imgHeight }}
-                  resizeMode="contain"
-                />
-              )}
-            </ScrollView>
+            {selected !== null && (
+              <>
+                <View style={styles.header}>
+                  <Text style={styles.headerTitle}>{CARDS[selected].title}</Text>
+                  <TouchableOpacity onPress={() => setSelected(null)}>
+                    <Text style={styles.closeBtn}>✕</Text>
+                  </TouchableOpacity>
+                </View>
+                <ScrollView contentContainerStyle={styles.imageContent}>
+                  <Image
+                    source={CARDS[selected].image}
+                    style={{ width: imgWidth, height: imgHeight }}
+                    resizeMode="contain"
+                  />
+                </ScrollView>
+              </>
+            )}
           </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
