@@ -12,17 +12,18 @@ type Props = NativeStackScreenProps<RootStackParamList, 'RoundEntry'>;
 
 export function RoundEntryScreen({ route, navigation }: Props) {
   const { roundNumber } = route.params;
-  const { game, submitRound, resetGame } = useGame();
+  const { game, submitRound, updateRound, resetGame } = useGame();
   const players = game?.players ?? [];
+  const existingRound = game?.rounds.find(r => r.number === roundNumber);
 
   const [bids, setBids] = useState<Record<string, string>>(
-    Object.fromEntries(players.map(p => [p.id, '']))
+    Object.fromEntries(players.map(p => [p.id, existingRound ? String(existingRound.bidsByPlayerId[p.id] ?? '') : '']))
   );
   const [tricks, setTricks] = useState<Record<string, string>>(
-    Object.fromEntries(players.map(p => [p.id, '']))
+    Object.fromEntries(players.map(p => [p.id, existingRound ? String(existingRound.tricksByPlayerId[p.id] ?? '') : '']))
   );
   const [bonuses, setBonuses] = useState<Record<string, string>>(
-    Object.fromEntries(players.map(p => [p.id, '']))
+    Object.fromEntries(players.map(p => [p.id, existingRound ? String(existingRound.bonusByPlayerId[p.id] ?? '') : '']))
   );
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [globalError, setGlobalError] = useState<string>('');
@@ -93,8 +94,12 @@ export function RoundEntryScreen({ route, navigation }: Props) {
 
     setErrors({});
     setGlobalError('');
-    submitRound(round);
-    navigation.navigate('Scoreboard');
+    if (existingRound) {
+      updateRound(round);
+    } else {
+      submitRound(round);
+    }
+    navigation.navigate('Scoreboard', { displayRound: roundNumber });
   }
 
   return (

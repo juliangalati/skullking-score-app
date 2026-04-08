@@ -7,6 +7,7 @@ type GameContextValue = {
   game: Game | null;
   startGame: (players: Player[]) => void;
   submitRound: (round: Round) => void;
+  updateRound: (round: Round) => void;
   resetGame: () => void;
 };
 
@@ -29,12 +30,22 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
+  function updateRound(round: Round) {
+    setGame(prev => {
+      if (!prev) return prev;
+      const scored = applyRoundScores(round, prev.players);
+      const rounds = prev.rounds.map(r => r.number === round.number ? scored : r);
+      const status = rounds.length >= TOTAL_ROUNDS ? 'finished' : 'in_progress';
+      return { ...prev, rounds, status };
+    });
+  }
+
   function resetGame() {
     setGame(null);
   }
 
   return (
-    <GameContext.Provider value={{ game, startGame, submitRound, resetGame }}>
+    <GameContext.Provider value={{ game, startGame, submitRound, updateRound, resetGame }}>
       {children}
     </GameContext.Provider>
   );

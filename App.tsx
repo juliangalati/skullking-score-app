@@ -36,7 +36,7 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Skull King' }} />
           <Stack.Screen name="PlayerSetup" component={PlayerSetupScreen} options={{ title: 'Players' }} />
           <Stack.Screen name="RoundEntry" component={RoundEntryScreen} options={({ route }) => ({ title: `Round ${route.params.roundNumber}` })} />
-          <Stack.Screen name="Scoreboard" component={ScoreboardScreen} options={{ headerBackVisible: false, title: 'Scoreboard' }} />
+          <Stack.Screen name="Scoreboard" component={ScoreboardScreen} options={{ title: 'Scoreboard' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </GameProvider>
