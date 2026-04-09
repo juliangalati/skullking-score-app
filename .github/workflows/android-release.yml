@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    name: Build & Package APK
+    name: Build & Package AAB
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +48,44 @@ jobs:
           MYAPP_RELEASE_STORE_PASSWORD=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           MYAPP_RELEASE_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}
           EOF
+
+      - name: Patch build.gradle with signing config
+        run: |
+          python3 - <<'PYEOF'
+          import re
+
+          path = 'android/app/build.gradle'
+          with open(path, 'r') as f:
+              content = f.read()
+
+          signing_block = """
+              signingConfigs {
+                  release {
+                      storeFile file(MYAPP_RELEASE_STORE_FILE)
+                      storePassword MYAPP_RELEASE_STORE_PASSWORD
+                      keyAlias MYAPP_RELEASE_KEY_ALIAS
+                      keyPassword MYAPP_RELEASE_KEY_PASSWORD
+                  }
+              }
+          """
+
+          # Insert signingConfigs before buildTypes
+          content = content.replace('    buildTypes {', signing_block + '    buildTypes {', 1)
+
+          # Add signingConfig line inside release buildType
+          content = re.sub(
+              r'(buildTypes \{.*?release \{)(.*?)(proguardFiles[^\n]*)',
+              lambda m: m.group(1) + m.group(2) + m.group(3) + '\n            signingConfig signingConfigs.release',
+              content,
+              count=1,
+              flags=re.DOTALL
+          )
+
+          with open(path, 'w') as f:
+              f.write(content)
+
+          print("build.gradle patched successfully")
+          PYEOF
 
       - name: Build release AAB
         working-directory: android
