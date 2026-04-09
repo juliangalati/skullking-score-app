@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "tmp",
-    "slug": "tmp",
+    "name": "Skull King Score",
+    "slug": "skullkingscore",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,15 +10,16 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0d1829"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.kunst.skullkingscore",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#0d1829"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false

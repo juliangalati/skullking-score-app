@@ -49,16 +49,16 @@ jobs:
           MYAPP_RELEASE_KEY_PASSWORD=${{ secrets.ANDROID_KEY_PASSWORD }}
           EOF
 
-      - name: Build release APK
+      - name: Build release AAB
         working-directory: android
-        run: ./gradlew assembleRelease
+        run: ./gradlew bundleRelease
 
-      - name: Rename APK with tag version
+      - name: Rename AAB with tag version
         run: |
-          mv android/app/build/outputs/apk/release/app-release.apk \
-             android/app/build/outputs/apk/release/skullking-${{ github.ref_name }}.apk
+          mv android/app/build/outputs/bundle/release/app-release.aab \
+             android/app/build/outputs/bundle/release/skullking-${{ github.ref_name }}.aab
 
-      - name: Upload APK to GitHub Release
+      - name: Upload AAB to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/release/skullking-${{ github.ref_name }}.apk
+          files: android/app/build/outputs/bundle/release/skullking-${{ github.ref_name }}.aab
