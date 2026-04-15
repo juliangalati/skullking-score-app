@@ -17,6 +17,7 @@
     },
     "android": {
       "package": "com.kunst.skullkingscore",
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0d1829"
